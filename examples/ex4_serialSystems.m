@@ -24,6 +24,9 @@ D = [0 0];
 
 sys2 = ss(A, B, C, D);
 
+% Also possible, but does not change anything here:
+% sys2 = NLSS(ss(A, B, C, D));
+
 %% Connect in series and simulate
 
 combinedSys = sys1 * sys2;

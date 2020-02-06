@@ -13,7 +13,7 @@ T  = 20;				% Simulation time
 
 %% Create and simulate system
 a = 0.5;
-f = [x(2)                               ; ...
+f = [x(2)                                ; ...
 	 a * (1-x(1)^2) * x(2) - x(1) + u(1)];
 
 sys = NLSS(t, x, f, u);

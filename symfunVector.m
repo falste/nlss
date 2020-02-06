@@ -1,6 +1,6 @@
 function res = symfunVector(name, size, symvar)
 % res = SYMFUNVECTOR(name, size, symvar)
-%	Initializes a vector with symfun elements 'namei(symvar)'
+%	Initializes a vector of symfun elements called 'namei(symvar)'
 
 	res = sym(name, [size, 1]);
 	for i = 1:size

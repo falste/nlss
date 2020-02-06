@@ -1,24 +1,21 @@
-function rawEqns = lagrange(q, Q, T, V)
-	doPrint = true;
+function rawEqns = lagrange(q, Q, T, V, varargin)
+	if nargin < 5
+		doPrint = false;
+	else
+		doPrint = varargin{5};
+	end
 
 	syms t;
 	qp = sym('qp', [1, length(q)]);
 	qv = sym('qv', [1, length(q)]);
+	rawEqns = sym('eq', [length(q), 1]);
 	
+	% Define lagrange equation
 	L = T - V;
 	L = subs(L, [diff(q, t) q], [qv qp]);
 	
-% 	dq = symfunVector('dq', length(q), t);
-	rawEqns = sym('eq', [length(q), 1]);
-	
+	% Evaluate lagrange equation for all i
 	for i = 1:length(q)
-% 		dLdq_dot = subs(L, diff(q(i),t), dq(i));
-% 		dLdq_dot = functionalDerivative(dLdq_dot, dq(i));
-% 		dLdq_dot = subs(dLdq_dot, dq(i), diff(q(i),t));
-% 		
-% 		rawEqns(i) = diff(dLdq_dot, t, 1) - functionalDerivative(L, q(i)) == Q(i);
-% 		rawEqns(i) = isolate(rawEqns(i), diff(q(i), t, t));
-
 		Ldq = diff(L, qv(i));
 		Lq  = diff(L, qp(i));
 		Ldq = subs(Ldq, [qv qp], [diff(q, t) q]);
@@ -27,6 +24,7 @@ function rawEqns = lagrange(q, Q, T, V)
 		rawEqns(i) = isolate(rawEqns(i), diff(q(i), t, t));
 	end
 	
+	% Print input and resulting movement equations
 	if doPrint
 		fprintf('\t<strong>Lagrange:</strong>\n\t\tT = %s\n', char(T));
 		fprintf('\t\tV = %s\n\n', char(V));

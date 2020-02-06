@@ -1,6 +1,7 @@
 classdef NLSSBuilder < handle
 % Helper class for creating a nonlinear state-space system (nlss) from
-% generalized coordinates and forces along those coordinates.
+% generalized coordinates and forces along those coordinates. NLSSBuilder is
+% also able to handle proportional friction along the generalized coordinates.
 	
 	properties (Access = private)
 		coordData = cell(0, 5);
@@ -8,13 +9,13 @@ classdef NLSSBuilder < handle
 	end
 
 	properties (Dependent)
-		q;
-		Q_original;
-		c_f;
-		Q;
-		inertia;
-		N;
-		T;
+		q;			% Generalized coordinates
+		Q_original; % Generalized forces
+		c_f;		% Friction coefficient
+		Q;			% Generalized forces + friction force along that axis
+		inertia;	
+		N;			% Number of generalized coordinates
+		T;			% Kinetic energy in the system
 	end
 	
 	properties (SetAccess = private)
@@ -56,8 +57,10 @@ classdef NLSSBuilder < handle
 		end
 		
 		function nlss = GenerateNLSS(obj, u, outputEqns, constants)
+			% Get movement equations via lagrange formalism
 			moveEquations = lagrange(obj.q, obj.Q, obj.T, obj.V);
 			
+			% Turn movement equations into state-space model
 			if nargin >= 3
 				[x, f, g, obj.substitutions] = moveEquation2ss(obj.q, moveEquations, rhs(outputEqns));
 			else
@@ -67,8 +70,9 @@ classdef NLSSBuilder < handle
 			u = subs(u, lhs(constants), rhs(constants));
 			f = subs(f, lhs(constants), rhs(constants));
 			g = subs(g, lhs(constants), rhs(constants));
-			
 			nlss = NLSS(obj.t, x, f, u, g);
+			
+			% Set variable labels of the state-space model (for plotting)
 			nlss.xlabels = cell(length(x),1);
 			for i = 1:length(x)
 				nlss.xlabels{i} = texlabel(lhs(obj.substitutions(i)));
