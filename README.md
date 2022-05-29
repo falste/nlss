@@ -10,9 +10,3 @@ y = g(t,x,u)
 as well as connect them in series and simulate them automatically.
 
 Building a nlss can be done by providing the symbolic functions f and g or by using the NLSSBuilder, which is based on the lagrange formalism.
-
-# Contributing
-This project is not done by any means. Feel free to suggest changes or implement them yourself.
-
-# Contributors
-Falke Stephan
