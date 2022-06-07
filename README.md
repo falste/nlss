@@ -1,6 +1,8 @@
 # nonlinear-statespace-matlab
 A nonlinear state-space (nlss) model for MATLAB similar to MATLABs own linear state-space (ss) model.
 
+The code needs some cleanup, but I currently do not have access to MATLAB.
+
 You can create a nonlinear state-space model
 
 dx/dt = f(t,x,u)
